@@ -1,0 +1,44 @@
+.container{
+    min-height: 100%;
+}
+.rowItem {
+    height: 40px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    padding: 0 12px;
+    background: #fff;
+    font-size: 14px;
+    border-top: 1px solid #eee;    
+    margin-top: 4px;
+}
+
+.nickName {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.number {
+    margin-right: 10px;
+    color: green;
+    font-weight: bold;
+}
+
+.score {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.score img {
+    width: 20px;
+    margin-left: 10px;
+}
+
+.noData {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

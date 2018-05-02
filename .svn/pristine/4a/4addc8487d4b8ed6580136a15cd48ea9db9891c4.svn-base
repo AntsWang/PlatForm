@@ -1,0 +1,42 @@
+.row{
+    height:40px;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    background:#fff;
+    padding:0 20px 0 20px;
+}
+.rowTitle{
+    height:40px;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    background:#fff;
+    padding:0 20px 0 20px;
+    align-items: center
+}
+.row div{
+    display: flex;
+    align-items: center;
+}
+.time{
+   flex:2;
+   justify-content: flex-start
+}
+.changeIn{
+    display: flex;
+    flex:1;
+    justify-content: center;
+    color:#30bf27;
+}
+.changeOut{
+    display: flex;
+    flex:1;
+    justify-content: center;
+}
+.message{
+    display: flex;
+    flex:1;
+    justify-content: flex-end
+}
+.container {
+    min-height: 100%;
+}

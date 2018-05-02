@@ -1,0 +1,122 @@
+:global(.noData) {
+    text-align: center;
+    margin-top: 150px;
+}
+
+a {
+    text-decoration: none;
+}
+.item{
+    height:40px;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    background:#fff;
+}
+.hello{
+    margin-top: 40px;
+}
+
+.record_nav {
+    top: 40px;
+    left: 0;
+    height: 40px;
+    background: #888;
+    display: flex;
+}
+
+.nav_link {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+:global(.active) {
+    color: #f00;
+    border-bottom: 2px solid blue;
+}
+
+.head {
+    height: 40px;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    background: #fff;
+    border-top: 1px solid #ccc;
+    margin-top: 44px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+}
+.time{
+    flex:5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.roundId{
+    flex:4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.bet{
+    flex:2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.pay{
+    flex:2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.payTitle{
+    composes:pay;
+    margin-right: 20px;
+}
+
+.win {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    min-height: 100%;
+}
+
+.listTitle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+.right{
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+.item img{
+    width:20px;
+    height:20px;
+}
+
+.title{
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    font-size: 14px;
+    background: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+}
+.listContent{
+    margin-top: 86px;
+}

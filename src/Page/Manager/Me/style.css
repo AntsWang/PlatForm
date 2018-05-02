@@ -1,0 +1,34 @@
+.container {
+    position: absolute;
+    bottom: 0;
+    top: 44px;
+    left: 0;
+    right: 0;
+}
+
+.tabs {
+    position: fixed;
+    top: 45px;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+
+.row{
+    height:40px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    background: #fff;
+}
+.left{
+    font-size: 14px;
+}
+
+.right{
+    width:20px;
+    height: 20px;
+}

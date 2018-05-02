@@ -1,0 +1,3 @@
+.pull_load_body{
+    overflow: scroll;
+}

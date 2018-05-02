@@ -1,0 +1,44 @@
+.row{
+    height:40px;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    background:#fff;
+    padding:0 10px 0 10px;
+}
+.rowTitle{
+    height:40px;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    background:#efeff4;
+    padding:0 10px 0 10px;
+    align-items: center
+}
+.row div{
+    display: flex;
+    align-items: center;
+}
+.time{
+   flex:2;
+   justify-content: flex-start;
+   text-align: center
+}
+.change{
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+.win{
+    display: flex;
+    flex:1;
+    justify-content: center;
+}
+.message{
+    display: flex;
+    flex:1;
+    justify-content: center
+}
+.container {
+    min-height: 100%;
+}

@@ -1,0 +1,4 @@
+:global(.weui-icon_toast){
+    margin: 16px 0 10px !important;    
+    font-size: 32px;
+}

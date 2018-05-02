@@ -1,0 +1,52 @@
+.rowItem{
+    height: 40px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    background: #fff;
+    padding:0 15px 0 15px;
+}
+.rowItem div{
+    display: flex;
+    align-items: center;
+}
+.memSoc{
+    flex:1;
+    justify-content: flex-start;
+}
+.mySoc{
+    flex:1;
+    justify-content: flex-end;
+
+}
+.mySoc img{
+    width:20px;
+    height:20px;
+}
+.state{
+    composes:rowItem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.inputScore{
+    flex:8;
+    justify-content: flex-start;
+    align-items: center;
+    display: flex;
+}
+.changeScore{
+    flex:3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color:#fff;
+}
+.addScore{
+    padding:2px 5px;
+    background: #1aad19;
+    border-radius: 2px;
+}
+.reduceScore{
+    padding:2px 5px;
+    background: #1aad19;
+    border-radius: 2px;
+}

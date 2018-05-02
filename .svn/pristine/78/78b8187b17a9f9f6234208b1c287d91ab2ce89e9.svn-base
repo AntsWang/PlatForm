@@ -1,0 +1,4 @@
+:global(.weui-picker__item) {
+    height: 25px;
+    line-height: 26px;
+}

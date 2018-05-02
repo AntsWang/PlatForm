@@ -1,0 +1,111 @@
+:global(.noData) {
+    text-align: center;
+    margin-top: 150px;
+}
+
+a {
+    text-decoration: none;
+}
+.item{
+    height:40px;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    background:#fff;
+    padding:0 10px 0 10px;
+}
+.hello{
+    margin-top: 40px;
+}
+
+.record_nav {
+    top: 40px;
+    left: 0;
+    height: 40px;
+    background: #888;
+    display: flex;
+}
+
+.nav_link {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+:global(.active) {
+    color: #f00;
+    border-bottom: 2px solid blue;
+}
+
+.head {
+    height: 40px;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    background:#efeff4;
+    border-top: 1px solid #ccc;
+    padding:0 10px 0 10px;
+}
+.time{
+    flex:5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.gameName{
+    flex:4;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+:global(.zero) {
+    flex: 3;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color:#333;
+}
+:global(.win) {
+    flex: 3;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color:#338ffe;
+}
+:global(.lose){
+    flex: 3;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color:#fd4d4d;
+}
+.win{
+    flex: 3;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.titleWin{
+    flex: 3;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 20px;
+}
+.container {
+    min-height: 100%;
+}
+
+.listTitle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+.right{
+    display: flex;
+    align-items: center;
+}
+.right img{
+    width:20px;
+    height: 20px;
+}

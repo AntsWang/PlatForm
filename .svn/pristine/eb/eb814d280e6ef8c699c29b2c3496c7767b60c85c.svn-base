@@ -1,0 +1,210 @@
+import * as React from 'react';
+
+import { Button, Toast } from "react-weui";
+import 'weui';
+import 'react-weui/build/packages/react-weui.css';
+
+import CompToast, { ToastType } from '../../../../Components/Toast';
+import LanguageManager from '../../../../Language/LanguageManager';
+import { ErrorCode } from '../../../../Enum/ErrorCode';
+import Money from "../../../../Utils/Money";
+
+import TimePicker from '../../../../Components/TimePicker';
+import { Time } from '../../../../Utils/Time';
+
+import ReportCtrl from '../../../../Controller/ReportCtrl';
+
+
+import { ReportGameRecordRoute, GetDetailRoute } from '../../../../Route/Config';
+import { Link } from 'react-router-dom';
+
+import PullLoad, { STATS } from "../../../../Components/PullList/index";
+const pullStyle = require("../../../../Components/PullList/ReactPullLoad.css");
+
+const styles = require("./style.css");
+const rightImg = require("../../../../Image/right.png");
+
+class GameRecord extends React.Component<any, any> {
+    private ReportCtrl: ReportCtrl = new ReportCtrl();
+    private toast: any;
+    private timePicker1: any;
+    private timePicker2: any;
+    private languageManager: LanguageManager;
+    constructor(props: any) {
+        super(props);
+        let dateNow: any = new Date();
+        let startDate: string = Time.GetNextMonth(dateNow, -1);
+        let endDate: string = Time.GetNextMonth(dateNow, 0);
+        this.state = {
+            startDate: startDate,
+            endDate: endDate,
+            memberList: [],
+            action: STATS.init,
+            isNoMore: false,
+            init: true,
+            memberId: null
+        }
+    }
+    componentDidMount() {
+        this.ShowToast("加载中...", ToastType.Loading);
+        let memberId = this.props.match.params.memberId,
+            { startDate, endDate } = this.state;
+        this.setState({
+            memberId
+        })
+        this.ReportCtrl.GetGameReport(startDate, endDate, true, this.Handler, memberId);
+    }
+    /**
+    * 显示日历
+    * @param event 事件对象
+    */
+    private ShowStartPicker = (event: any): void => {
+        this.timePicker1.Show(this.state.startDate);
+    }
+    /**
+     * 时间选择回调处理
+     * @param value 时间
+     */
+    public StartTimeHanler = (value: string): void => {
+        this.setState({ startDate: value });
+    }
+    /**
+      * 显示日历
+      * @param event 事件对象
+      */
+    private ShowEndPicker = (event: any): void => {
+        this.timePicker2.Show(this.state.startDate);
+    }
+    /**
+     * 时间选择回调处理
+     * @param value 时间
+     */
+    public EndTimeHanler = (value: string): void => {
+        this.setState({ endDate: value });
+    }
+
+    /**
+     * 查询报表
+    */
+    private searchGameList = () => {
+        this.ShowToast("加载中...", ToastType.Loading);
+        //获取起始时间
+        let { startDate, endDate } = this.state;
+        if (startDate == "") {
+            alert("请选择正确的时间");
+            return;
+        }
+        this.ReportCtrl.GetGameReport(startDate, endDate, true, this.Handler, this.state.memberId);
+
+    }
+    /**
+    * 提示信息
+    * @param errorKey 提示信息
+    * @param  type 信息类型
+   */
+    private ShowToast = (errorKey: string, type: ToastType = ToastType.Success): void => {
+        if (!this.languageManager) {
+            this.languageManager = new LanguageManager();
+        }
+        let msg: string = this.languageManager.GetErrorMsg(errorKey);
+        this.toast.Show(msg, type);
+    }
+    /**
+     * 数据请求回调
+     *@param data 请求的数据 
+     *@param isRefresh 是否是刷新
+     *@param error 错误信息
+     */
+    private Handler = (data: any, isRefresh: boolean, error?: string): void => {
+        this.toast.Hide();
+        if (error) {
+            //提示错误信息
+            this.ShowToast(error, ToastType.Error);
+            return;
+        }
+        //初始化设置action为reset
+
+        //刷新
+        if (isRefresh) {
+            this.setState({
+                memberList: data
+            });
+        }
+
+    }
+    /**
+     * 渲染游戏记录
+     */
+    renderReportItem = (rowItem: any, index: number): any => {
+        let total = rowItem.TotalPay - rowItem.TotalBet;
+        return (
+            <Link to={`${GetDetailRoute("/report/gameRecord/", rowItem.GameID)}`} key={index} className={""}>
+                <div className={styles.item}>
+                    <div className={styles.name}>{rowItem.GameName}</div>
+                    <div className={total > 0 ? "win" : "lose"}>
+                          {Money.Format(total)}
+                    </div>
+                    <div className={styles.right}>
+                        <img src={rightImg} />
+                    </div>
+                </div>
+            </Link>
+        )
+    }
+    /**
+     * 渲染数据
+     */
+    public renderData = () => {
+        let { memberList, isNoMore, action } = this.state;
+        if (!memberList || memberList.length == 0) {
+            return (
+                <div className="noData">
+                    无数据
+                </div>
+
+            )
+        } else {
+            return (
+                <div className={styles.listContent}>
+                    {
+                        memberList.map((item: any, index: number) => {
+                            return this.renderReportItem(item, index);
+                        })
+                    }
+
+                </div>
+            )
+        }
+    }
+
+    render() {
+        return (
+            <div className={styles.container}>
+                <CompToast ref={(c: any) => this.toast = c} />
+                <div className={styles.listTitle}>
+                    <div className={styles.title}>游戏结果</div>
+                    <div className={styles.head}>
+                        <div className={styles.timeContainer}>
+                            <div className={styles.time} onClick={this.ShowStartPicker}>{this.state.startDate}</div>
+                            <div className={styles.time} onClick={this.ShowEndPicker}>{this.state.endDate}</div>
+                        </div>
+                        {/* <div className={styles.time}>
+                            <input className={styles.time} value={this.state.startDate} onClick={this.ShowStartPicker} onChange={(e) => { this.setState({ startDate: e }) }} />
+                            &nbsp;—&nbsp;
+                        <input className={styles.time} value={this.state.endDate} onClick={this.ShowEndPicker} onChange={(e) => { this.setState({ startDate: e }) }} />
+                        </div> */}
+                        <div className={styles.search} onClick={() => { this.searchGameList() }}>查询</div>
+                        <TimePicker ref={(e: any) => { this.timePicker1 = e }} time={this.state.startDate} timeHanler={this.StartTimeHanler} />
+                        <TimePicker ref={(e: any) => { this.timePicker2 = e }} time={this.state.endDate} timeHanler={this.EndTimeHanler} />
+                    </div>
+                    <div className={styles.headname}>
+                        <div className={styles.name}>游戏名称</div>
+                        <div className={styles.titlewin}>总输赢</div>
+                    </div>
+                    {this.renderData()}
+                </div>
+            </div>
+        );
+    }
+}
+export default GameRecord;

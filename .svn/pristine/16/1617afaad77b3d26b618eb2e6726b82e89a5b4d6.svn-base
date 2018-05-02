@@ -1,0 +1,35 @@
+import * as React from 'react';
+import LanguageManager from '../../Language/LanguageManager';
+
+const style = require("./style.css");
+const EditImg = require("../../Image/edit.png");
+
+interface State {
+    isEdit: boolean,
+    oldValue: any,
+    newValue: any
+}
+export default class InfoItemInput extends React.Component<any, State> {
+    private languageManager: LanguageManager = new LanguageManager();
+    constructor(props: any, state: State) {
+        super(props);
+    }
+
+    render() {
+        let { label, value } = this.props;
+        return (
+            <div className={style.rowItem}>
+                <label className={style.inputScore}>
+                    {label}:{value}
+                </label>
+
+
+
+            </div>
+
+        );
+    }
+
+
+};
+

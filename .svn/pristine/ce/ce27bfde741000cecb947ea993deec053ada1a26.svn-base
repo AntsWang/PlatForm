@@ -1,0 +1,54 @@
+import * as React from 'react';
+import Routes from "./Route";
+import "./Style/reset.css";
+import "./Style/base.css";
+import 'weui';
+import 'react-weui/build/packages/react-weui.css';
+import UserCtrl from "./Controller/UserCtrl";
+import WeChat from './Utils/WeChat';
+import * as GameConfig from './GameConfig';
+import { WeChatSignatureDto, WeChatShareDto } from './Dto/WeChatShareDto';
+export default class App extends React.Component<{}, {}> {
+    constructor(props: any) {
+        super(props);
+        let userCtrl: UserCtrl = new UserCtrl();
+        //登录成功，获取会员信息
+        userCtrl.GetMemberInfo((response: any) => {
+            let memberId = 1;
+            if (response && response.MemberId) {
+                memberId = response.MemberId;
+            }
+            let wechat: WeChat = new WeChat();
+            let url: string = window.location.href;
+            userCtrl.GetJsSignature(url, (response: WeChatSignatureDto) => {
+                wechat.Init(response);
+                let authorizeDto: WeChatShareDto = GameConfig.GetWeChatShareDto(memberId.toString(), true);
+                //分享微信好友
+                wechat.ShareAppMessage(authorizeDto.Title, authorizeDto.Desc, authorizeDto.ImgUrl, authorizeDto.Link, this.WeChatShareHandler);
+                //分享QQ
+                wechat.ShareQQ(authorizeDto.Title, authorizeDto.Desc, authorizeDto.ImgUrl, authorizeDto.Link, this.WeChatShareHandler);
+
+                let dto: WeChatShareDto = GameConfig.GetWeChatShareDto(memberId.toString(), false);
+                //分享朋友圈
+                wechat.ShareTimeline(dto.Title, dto.ImgUrl, dto.Link, this.WeChatShareHandler);
+                //分享qq空间
+                wechat.ShareQZone(dto.Title, dto.Desc, dto.ImgUrl, dto.Link, this.WeChatShareHandler);
+            })
+
+        });
+
+    }
+
+    /**
+     * 分享回调
+     * @param status 分享结果类型 1.分享成功 0.取消分享 -1.分享失败
+     */
+    public WeChatShareHandler(status: number): void {
+        console.log(status);
+    };
+    render() {
+        return (
+            <Routes />
+        );
+    }
+}

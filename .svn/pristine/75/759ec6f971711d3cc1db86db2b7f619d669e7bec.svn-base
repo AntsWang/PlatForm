@@ -1,0 +1,23 @@
+html,
+body {
+    background: #eee;
+    height: 100%;
+}
+
+:global(#root) {
+    height: 100%;
+}
+
+:global(.button) {
+    display: inline-block;
+    height: 25px;
+    line-height: 25px;
+    width: 55px;
+    background: #1aad19;
+    color: #ffffff;
+    margin-right: 20px;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 15px;
+    border-radius: 4px;
+}

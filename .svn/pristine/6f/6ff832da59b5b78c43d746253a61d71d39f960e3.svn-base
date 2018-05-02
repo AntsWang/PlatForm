@@ -1,0 +1,38 @@
+.row{
+    height:40px;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    background:#fff;
+    padding:0 20px 0 20px;
+}
+.rowtitle{
+    height:40px;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    background:#efeff4;
+    padding:0 20px 0 20px;
+}
+.rowtitle div{
+    display: flex;
+    align-items: center;
+}
+.row div{
+    display: flex;
+    align-items: center;
+}
+.time{
+ flex: 4;
+ justify-content: flex-start
+}
+.childAccount,.parentAccount,.acount{
+    flex:2;
+    justify-content: center;
+}
+.win{
+    flex:2;
+    justify-content: center;
+}
+.remark{
+    flex:2;
+    justify-content: center
+}

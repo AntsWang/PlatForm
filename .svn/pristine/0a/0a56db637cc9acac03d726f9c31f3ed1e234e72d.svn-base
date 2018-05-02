@@ -1,0 +1,50 @@
+.title{
+    height: 40px;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    background: #efeff4;
+}
+.title div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.row {
+    height: 46px;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    background: #fff;
+}
+
+.row div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.time {
+    flex:4;
+    text-align: center;
+}
+.change{
+    width:27%;
+}
+.win{
+    width:27%;
+}
+
+
+.message {
+    width:23%;
+    flex-direction:column;
+}
+
+.container {
+    min-height: 100%;
+}
+
+.timeContent{
+    width:23%;
+    text-align: center;
+    flex-direction: column;
+}

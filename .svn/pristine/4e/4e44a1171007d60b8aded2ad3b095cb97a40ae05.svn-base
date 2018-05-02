@@ -1,0 +1,247 @@
+.head{
+    height:40px;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    align-items: center;
+    padding: 0 10px 0 10px;
+    background:#fff;
+}
+.headdate{
+    height:40px;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    align-items: center;
+    padding: 0 10px 0 10px;
+    background:#efeff4;
+}
+.head input{
+    height:20px;
+    font-size: 12px;
+    text-align: center;
+}
+.headdate input{
+    height:20px;
+    font-size: 12px;
+    text-align: center;
+}
+.search{
+    height:20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #30bf27;
+    border-radius: 4px;
+    color:#fff;
+    padding: 0 5px;
+}
+.timeContainer{
+   flex:5;
+   display: flex;
+   align-items: center; 
+}
+.time{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+.type{
+    width:25%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.win{
+    width:25%;
+    color: #338ffe;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.lose{
+    width:25%;
+    color:#fd4d4d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.ozero{
+    width:25%;
+    color:#333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.rwin{
+    width:25%;
+    color: #338ffe;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: center;
+}
+.rlose{
+    width:25%;
+    color:#fd4d4d;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: center;
+}
+.rozero{
+    width:25%;
+    color:#333;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: center;
+}
+.allTotal{
+    display: flex;
+    height: 40px;
+    align-items: center;
+    background: #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 0 10px 0 10px;
+    text-align: center;
+}
+.zero{
+    width:25%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color:#333;
+    text-align: center;
+}
+.totalWin{
+    flex:1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color:#338ffe;
+    text-align: center;
+}
+.total{
+    flex:1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color:#fd4d4d;
+    text-align: center;
+}
+.back{
+    flex:1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: red;
+}
+.item{
+    display: flex;
+    height:40px;
+    background:#fff;
+    border-bottom: 1px solid #ddd;
+    align-items: center;
+    padding:0 10px 0 10px;
+}
+.rowTitle{
+    display: flex;
+    height:40px;
+    background:#fff;
+    border-bottom: 1px solid #ddd;
+    align-items: center;
+    padding:0 10px 0 10px;
+    background: #efeff4;
+}
+.name{
+    width:25%;
+}
+.score{
+    flex:1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.score  img{
+    width:20px;
+    height:20px;
+}
+.rightImg{
+    width: 20px;
+    height: 20px;
+}
+.noChildren{
+    text-align: center;
+    margin-top: 100px;
+    font-size: 14px;
+}
+.totalName{
+    flex:3;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.allZero{
+    flex:1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color:#333;
+    margin-right: 20px;
+}
+.allWin{
+    flex:1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color:#338ffe;
+    margin-right: 20px;
+}
+.allLose{
+    flex:1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 20px;
+    color:#fd4d4d
+}
+
+.bet{
+    width:25%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.pay{
+    width:25%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.result{
+    flex:1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 20px;
+}
+
+.table{
+    width:100%;
+    border-collapse: collapse;
+}
+.tr{
+    height:40px;
+    border-bottom: 1px solid #ccc;
+}
+.td{
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+}

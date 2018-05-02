@@ -1,0 +1,7 @@
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxbb5416518880be41&redirect_uri=http%3A%2F%2Fwww.zyyft.cn%2Ftest.html%3fgameid%3d1%26parentid%3d1&response_type=code&scope=snsapi_base&state=123#wechat_redirect
+
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxbb5416518880be41&redirect_uri=http%3A%2F%2Fwww.zyyft.cn%3fgameid%3d1%26parentid%3d1&response_type=code&scope=snsapi_base&state=123#wechat_redirect
+
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxbb5416518880be41&redirect_uri=http%3A%2F%2Fwww.zyyft.cn%2Fgameshareplatform%2F%3fgameid%3d1%26parentid%3d1&response_type=code&scope=snsapi_base&state=123#wechat_redirect
+
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcf3db3f292310c00&redirect_uri=http%3A%2F%2Feg.s1.natapp.cc%2Fgameshareplatform%2F%3fgameid%3d1%26parentid%3d1&response_type=code&scope=snsapi_base&state=123#wechat_redirect

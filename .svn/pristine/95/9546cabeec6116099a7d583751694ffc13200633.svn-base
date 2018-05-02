@@ -1,0 +1,120 @@
+import * as React from 'react';
+import {
+    Link,
+    Prompt
+} from 'react-router-dom';
+
+import { AuthorizationDto } from '../../Dto/AuthorizationDto';
+import CacheManager, { CacheType, UserInfo, Authorization } from '../../Service/CacheManager/CacheManager';
+
+import { GetRedirectUrl } from "../../GameConfig";
+import CompToast, { ToastType } from '../../Components/Toast';
+import LanguageManager from '../../Language/LanguageManager';
+import { ErrorCode } from '../../Enum/ErrorCode';
+
+
+import { MemberRoute } from '../../Route/Config';
+import UserCtrl from "../../Controller/UserCtrl";
+import Money from '../../Utils/Money';
+const logoImg = require("../../Image/logo.png");
+const style = require("./style.css");
+
+export default class Home extends React.Component<any, any> {
+    private userCtrl: UserCtrl = new UserCtrl();
+    private toast: any;
+    private languageManager: LanguageManager;
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            isLogin: this.userCtrl.IsLogin(),
+            isClose: this.userCtrl.IsClose(),
+            memberInfo: this.userCtrl.GetMemberInfoByLocal(),
+            gameList: []
+        }
+    }
+    /**
+     * 提示信息
+     * @param errorKey 提示信息
+     * @param  type 信息类型
+    */
+    private ShowToast = (errorKey: string, type: ToastType = ToastType.Success): void => {
+        if (!this.languageManager) {
+            this.languageManager = new LanguageManager();
+        }
+        let msg: string = this.languageManager.GetErrorMsg(errorKey);
+        this.toast.Show(msg, type);
+    }
+    /**
+     * 游戏跳转
+     * @param id  游戏ID
+     * @param url 游戏地址
+     */
+    private GameLogin = (id: number) => {
+        let isLogin = this.userCtrl.GameLogin(id);
+        if (isLogin) {
+            window.location.href = GetRedirectUrl(id)
+        }
+        else {
+            //todo
+            this.ShowToast("token_Error", ToastType.Error);
+
+        }
+    }
+
+    /**
+     * 渲染按钮
+     */
+    public renderButton = (): any => {
+        if (!this.state.isLogin) {
+            return (<Link to={MemberRoute} className={style.button}>关注</Link>)
+        } else if (this.state.isClose) {
+            return null;
+        } else {
+            return (<Link to={MemberRoute} className={style.button}>管理</Link>)
+        }
+    }
+    private renderGameList = (item: any, index: number) => {
+        return (
+            <div key={index} className={style.rowItem} onClick={() => { this.GameLogin(item.id) }}>
+                <div className={style.img}>
+                    <img src={item.imgUrl} />
+                </div>
+                <div className={style.gameMsg}>
+                    <div className={style.name}>{item.name}<span>点击进入游戏 ></span></div>
+                    <div className={style.start}>推荐指数:{item.star}</div>
+                </div>
+            </div>
+        )
+    }
+    render() {
+        let { gameList } = this.state;
+        gameList = [{ imgUrl: logoImg, name: " 射龙门", star: "五颗星", id: 1 }];
+        return (
+            <div className="home">
+                <CompToast ref={(c) => this.toast = c} />
+                <div className={style.header}>
+                    <div className={style.info} >
+                        <img src={logoImg} alt="" className={style.logo} />
+                        {
+                            this.state.isLogin ? (
+                                <label htmlFor="">{"分数：" + Money.Format(this.state.memberInfo.Score)}</label>
+                            ) : null
+                        }
+                    </div>
+                    <div className={style.manager}>
+                        {
+                            this.renderButton()
+                        }
+                    </div>
+                </div>
+                <div className={style.gameList}>
+                    {
+                        gameList.map((item: any, index: number) => {
+                            return this.renderGameList(item, index);
+                        })
+                    }
+                </div>
+            </div>
+        );
+    }
+}

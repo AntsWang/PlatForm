@@ -1,0 +1,92 @@
+.rowItem{
+    height: 40px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    background: #fff;
+    padding:0 15px 0 15px;
+}
+.rowItem div{
+    display: flex;
+    align-items: center;
+}
+.memSoc{
+    flex:1;
+    justify-content: flex-start;
+}
+.mySoc{
+    flex:1;
+    justify-content: flex-end;
+
+}
+.mySoc img{
+    width:20px;
+    height:20px;
+}
+.state{
+    composes:rowItem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.inputScore{
+    flex:8;
+    justify-content: flex-start;
+    align-items: center;
+    display: flex;
+}
+.changeScore{
+    flex:3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color:#fff;
+}
+.addScore{
+    padding:2px 5px;
+    background: #1aad19;
+    border-radius: 2px;
+}
+.reduceScore{
+    padding:2px 5px;
+    background: #1aad19;
+    border-radius: 2px;
+}
+
+.inputRow{
+    width: 80%;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.input{
+    width:60%;
+}
+.loginBtn{
+    width: 30%;
+    height: 26px;
+    background: #338ffe;
+    border-radius: 10px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal{
+    position: absolute;
+    top:0;
+    left: 0;
+    display: flex;
+    width:100%;
+    height:100%;
+    background:#808080;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    flex-direction: column;
+}
+
+.btn{
+    width: 80%;
+    display: flex;
+    justify-content: space-around;
+}

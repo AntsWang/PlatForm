@@ -1,0 +1,87 @@
+.rowItem {
+    height: 40px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    background: #fff;
+    padding: 0 15px 0 15px;
+}
+
+.rowItem div {
+    display: flex;
+    align-items: center;
+}
+
+.memSoc {
+    flex: 1;
+    justify-content: flex-start;
+}
+
+.mySoc {
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.mySoc img {
+    width: 20px;
+    height: 20px;
+}
+
+.state {
+    composes: rowItem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.inputScore {
+    flex: 8;
+    justify-content: flex-start;
+    align-items: center;
+    display: flex;
+}
+
+.changeScore {
+    flex: 3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+
+.addScore {
+    padding: 2px 5px;
+    background: #1aad19;
+    border-radius: 4px;
+}
+
+.reduceScore {
+    padding: 2px 5px;
+    background: #1aad19;
+    border-radius: 4px;
+    margin-left: 2px;
+}
+
+input {
+    width: 40%;
+    height: 24px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 0 6px !important;
+}
+
+.butuon {
+    height: 16px;
+    line-height: 17px;
+    background: #1aad19;
+    color: #ffffff;
+    margin-left: 20px;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 4px;
+    vertical-align: middle;
+    padding: 4px 8px;
+}
+
+.noEdit {
+    padding: 0 7px !important;
+    margin-top: 2px;
+}

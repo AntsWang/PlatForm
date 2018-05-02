@@ -1,0 +1,85 @@
+.header {
+    composes: flexbox from '../../Style/flex.css';
+    height: 44px;
+    border-bottom: 1px solid #dcdcdc;
+    background: #fff;
+}
+
+.header>div {
+    height: 100%;
+}
+
+.info {
+    composes: flexbox from '../../Style/flex.css';
+    composes: flex1 from '../../Style/flex.css';
+    composes: flexaligncenter from '../../Style/flex.css';
+}
+
+.info label {
+    line-height: 32px;
+    vertical-align: middle;
+    color: rgb(231, 172, 94);
+    font-size: 14px;
+}
+
+.manager {
+    composes: flex1 from '../../Style/flex.css';
+    text-align: right;
+}
+
+.manager .button {
+    display: inline-block;
+    height: 25px;
+    line-height: 25px;
+    background: #1aad19;
+    color: #ffffff;
+    margin-right: 20px;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 15px;
+    border-radius: 4px;
+    padding: 0 10px;
+}
+
+.logo {
+    width: 32px;
+    height: 32px;
+    margin:0 12px;
+}
+.rowItem{
+    display: flex;
+    height:80px;
+    border-bottom: 1px solid #dcdcdc;
+    border-top: 1px solid #dcdcdc;
+    align-items: center;
+    padding-left: 20px;
+    background:#fff;
+    margin-top:10px;
+}
+.gameMsg{
+    margin-left: 20px;
+    font-size: 14px;
+    height:60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.name span{
+    color: red;
+    font-size: 13px;
+    position: absolute;
+    right: 8px;
+}
+.start{
+    color:#808080
+}
+.imgRight{
+    position: absolute;
+    right: 10px;
+}
+
+select{
+    position: absolute;
+    top: 13px;
+    right: 102px;
+}

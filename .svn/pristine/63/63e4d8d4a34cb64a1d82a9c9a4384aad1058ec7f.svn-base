@@ -1,0 +1,362 @@
+
+import BaseCtrl from './BaseCtrl';
+
+import { UserInfoDto } from '../Dto/UserInfoDto';
+import { ErrorCode } from '../Enum/ErrorCode';
+import * as ApiConfig from './Config';
+import Verification from '../Utils/Verification';
+import { GetQuery } from '../Utils/Url';
+import { LoginDto, LoginResultDto, LoginMultiAccountDto, LoginSuccessDto, ResultEnum, LoginByCodeDto, LoginByIdDto } from '../Dto/LoginInfoDto';
+import { AuthorizationDto } from '../Dto/AuthorizationDto';
+import CacheManager, { CacheType, UserInfo, Authorization } from '../Service/CacheManager/CacheManager';
+import { DeviceId, DeviceType } from '../GameConfig';
+
+export default class UserCtrl extends BaseCtrl {
+    /**
+     * 登录Dto信息
+     */
+    protected dto: LoginDto = new LoginDto();
+    constructor() {
+        super();
+    }
+    /**
+     * 登录
+     * @param code 微信授权登录，从地址栏中获取得到
+     * @param handler 登录回调事件
+     */
+    public Login(handler: Function): void {
+        //获取地址栏中code
+        let code: string = GetQuery("code");
+        //获取地址栏中state参数，即父级（推荐人）ID
+        let parentID: string = GetQuery("parentid");
+        //从缓存中获取Code，包括Code，Token,GameToken
+        let cacheAuthorization: Authorization = CacheManager.GetCache(CacheType.Authorization);
+        let authorizationDto: AuthorizationDto = cacheAuthorization.GetAuthorization();
+        //1.存在存储的Code，传入Code存在且不等于存储的Code，直接使用Code登录
+        //2.没有存储的Code，传入Code存在，直接使用Code登录
+        if ((authorizationDto != null && code && code != authorizationDto.Code) || (authorizationDto == null && code)) {
+            //通过Code登录
+            let loginByCodeDto: LoginByCodeDto = new LoginByCodeDto();
+            loginByCodeDto.Code = code;
+            loginByCodeDto.ParentID = parentID;
+            loginByCodeDto.DeviceType = DeviceType;
+            loginByCodeDto.DeviceId = DeviceId;
+            //调用单例api的Post方法，
+            this.webApi.Post(ApiConfig.Login, loginByCodeDto).then((data: any) => {
+                console.log("Login成功回调");
+                this.LoginSuccess(data, code, handler);
+            }, (error: any) => {
+                console.log("Login失败回调");
+                this.LoginError(error, handler);
+            });
+        } else if (authorizationDto != null && authorizationDto.Token) {
+            //token直接做登录验证
+            //设置token到单例webapi
+            this.webApi.SetToken(authorizationDto.Token);
+            //调用单例api的Post方法
+            this.webApi.Post(ApiConfig.LoginCheck, null).then((data: any) => {
+                console.log("LoginCheck成功回调");
+                this.LoginSuccess(data, code, handler);
+            }, (error: any) => {
+                console.log("LoginCheck失败回调");
+                this.LoginError(error, handler);
+            });
+        } else {
+            let result: LoginResultDto = new LoginResultDto();
+            result.Result = ResultEnum.NO;
+            handler(result);
+        }
+    }
+
+    /**
+    * 通过会员id和临时token登录
+    * @param memberID 会员id
+    * @param handler 登录回调事件
+    */
+    public LoginByID(memberId: number, handler: Function): void {
+        //获取地址栏中code
+        let code: string = GetQuery("code");
+        //从缓存中获取Code，包括Code，Token,GameToken
+        let cacheAuthorization: Authorization = CacheManager.GetCache(CacheType.Authorization);
+        let authorizationDto: AuthorizationDto = cacheAuthorization.GetAuthorization();
+        if (authorizationDto != null && authorizationDto.Token) {
+            let loginByIdDto: LoginByIdDto = new LoginByIdDto();
+            loginByIdDto.MemberID = memberId;
+            loginByIdDto.DeviceType = DeviceType;
+            loginByIdDto.DeviceId = DeviceId;
+            //设置token到单例webapi
+            this.webApi.SetToken(authorizationDto.Token);
+            //请求调Net的api，
+            this.webApi.Post(ApiConfig.LoginById, loginByIdDto).then((data: any) => {
+                console.log("LoginCheck成功回调");
+                this.LoginSuccess(data, code, handler);
+            }, (error: any) => {
+                console.log("LoginCheck失败回调");
+                this.LoginError(error, handler);
+            });
+        } else {
+            let result: LoginResultDto = new LoginResultDto();
+            result.Result = ResultEnum.NO;
+            handler(result);
+        }
+    }
+
+    /**
+     * 登录成功回调
+     * @param response 会员信息
+     */
+    private LoginSuccess(response: LoginSuccessDto | LoginMultiAccountDto, code: string, handler: Function) {
+        //返回结果是登录成功
+        let dto: AuthorizationDto = new AuthorizationDto();
+        dto.Code = code;
+        if (!(response as LoginMultiAccountDto).Accounts) {
+            //微信只有一个账号
+            dto.Token = (response as LoginSuccessDto).SessionToken;
+            dto.SocketToken = (response as LoginSuccessDto).SocketToken;
+            dto.IsMulti = false;
+            //微信只有一个账号
+            dto.IsClose = (response as LoginSuccessDto).Closed;
+            //写入到WebApi
+            this.webApi.SetToken(dto.Token);
+            //写入缓存中
+            let cacheAuthorization: Authorization = CacheManager.GetCache(CacheType.Authorization);
+            cacheAuthorization.SetAuthorization(dto);
+
+            let result: LoginResultDto = new LoginResultDto();
+            result.Result = ResultEnum.LOGIN;
+            if (typeof handler === "function") {
+                handler(result);
+            }
+        } else {
+            //微信有多个账号
+            dto.IsMulti = true;
+            dto.Token = (response as LoginMultiAccountDto).TempToken;
+            dto.SocketToken = null;
+            dto.Accounts = (response as LoginMultiAccountDto).Accounts;
+            //写入缓存中
+            let cacheAuthorization: Authorization = CacheManager.GetCache(CacheType.Authorization);
+            cacheAuthorization.SetAuthorization(dto);
+
+            let result: LoginResultDto = new LoginResultDto();
+            result.Result = ResultEnum.MULTI;
+            result.Data = dto.Accounts;
+            if (typeof handler === "function") {
+                handler(result);
+            }
+        }
+    }
+
+    /**
+     * 登录错误
+     * @param error 
+     */
+    private LoginError(error: string, handler?: Function) {
+        console.log("LoginError", error);
+        let result: LoginResultDto = new LoginResultDto();
+        result.Result = ResultEnum.ERROR;
+        result.Data = error;
+        if (typeof handler === "function") {
+            handler(result);
+        }
+    }
+    /**
+     * 获取微信配置信息
+     * @param url 
+     */
+    public GetJsSignature(url: string, successHandler: Function) {
+        let obj = {
+            Url: url,
+        }
+        //请求调Net的api，
+        this.webApi.Post(ApiConfig.GetJsSignature, obj).then((response: any) => {
+            // console.log("GetWeChatParams成功回调");
+            successHandler(response);
+        }, (error: any) => {
+            // console.log("获取微信配置信息失败", error);
+        });
+    }
+
+    /**
+     * 获取会员信息
+     */
+    public GetMemberInfo(handler: Function): void {
+        //请求调Net的api，
+        this.webApi.Post(ApiConfig.GetMemberInfo, null).then((response: any) => {
+            console.log("GetMemberInfo成功回调");
+            //写入缓存中
+            let cacheMemberInfo: UserInfo = CacheManager.GetCache(CacheType.UserInfo);
+            cacheMemberInfo.SetUserInfo(response);
+            handler(response);
+        }, (error: any) => {
+            console.log("GetMemberInfo失败回调");
+            this.LoginError(error.toString(), handler);
+        });
+    };
+
+    /**
+     * 获取会员信息
+     */
+    public GetAuthorizationDtoByLocal(): AuthorizationDto {
+        //从缓存中获取Code，包括Code，Token,GameToken等
+        let cacheAuthorization: Authorization = CacheManager.GetCache(CacheType.Authorization);
+        let authorizationDto: AuthorizationDto = cacheAuthorization.GetAuthorization();
+        if (authorizationDto == null) {
+            authorizationDto = new AuthorizationDto();
+        }
+        return authorizationDto;
+    };
+
+
+    /**
+     * 获取会员信息
+     */
+    public GetMemberInfoByLocal(): UserInfoDto {
+        //从缓存中获取会员信息
+        let cacheMemberInfo: UserInfo = CacheManager.GetCache(CacheType.UserInfo);
+        let memberInfoDto: UserInfoDto = cacheMemberInfo.GetUserInfo();
+        return memberInfoDto;
+    };
+
+    /**
+     * 登出
+     */
+    public Logout(): boolean {
+        this.loginStatus = false;
+        //清除缓存中的信息
+        let cacheAuthorization: Authorization = CacheManager.GetCache(CacheType.Authorization);
+        cacheAuthorization.ClearAuthorization();
+
+        let cacheMemberInfo: UserInfo = CacheManager.GetCache(CacheType.UserInfo);
+        cacheMemberInfo.ClearUserInfo();
+        return true;
+    }
+
+    /**
+     * 获取会员信息
+     */
+    public GetUserInfoByLocal = (): UserInfoDto => {
+        if (!this.loginStatus) {
+            return null;
+        }
+        return this.userInfo;
+    }
+
+    /**
+     * 是否登录
+     */
+    public IsLogin = (): boolean => {
+        return this.loginStatus;
+    }
+
+    /**
+     * 是否登录
+     */
+    public IsClose = (): boolean => {
+        return this.closeStatus;
+    }
+
+
+    /**
+     * 设置账号
+     * @param account 账号
+     * @param handler 回调
+     */
+    public SetAccount(account: string, handler: Function): void {
+        if (this.userInfo && this.userInfo.Account) {
+            handler(null, [account], ErrorCode[ErrorCode.AccountExist]);
+        }
+        let dto: any = {
+            Account: account
+        }
+        this.webApi.Post(ApiConfig.SetAccountApi, dto).then((data: any) => {
+            handler(null, [account]);
+        }, (error: string) => {
+            console.log("SetRemark error", error);
+            handler(null, [account], error);
+        })
+    }
+
+    /**
+     * 设置子会员密码
+     * @param password 密码
+     * @param handler 回调
+     */
+    public ResetPassword(password: string, handler: Function): void {
+        //出分值必须大于0
+        if (!Verification.Password(password)) {
+            handler(null, [password], ErrorCode[ErrorCode.PasswordFormatError]);
+            return;
+        }
+        let dto: any = {
+            Password: password
+        }
+        this.webApi.Post(ApiConfig.ResetPasswordApi, dto).then((data: any) => {
+            handler(null, [password]);
+        }, (error: string) => {
+            console.log("SetRemark error", error);
+            handler(null, [password], error);
+        })
+    }
+
+    /**
+     * 设置昵称
+     * @param nickname 账号
+     * @param handler 回调
+     */
+    public ModifyNickname(nickname: string, handler: Function): void {
+        if (!nickname) {
+            handler(null, [nickname], ErrorCode[ErrorCode.NicknameFormatError]);
+        }
+        let dto: any = {
+            Nickname: nickname
+        }
+        this.webApi.Post(ApiConfig.SetAccountApi, dto).then((data: any) => {
+            handler(null, [nickname]);
+        }, (error: string) => {
+            console.log("SetRemark error", error);
+            handler(null, [nickname], error);
+        })
+    }
+
+
+    /**
+     * 设置手机号码
+     * @param phoneNumber 密码
+     * @param handler 回调
+     */
+    public ResetPhoneNumber(phoneNumber: string, handler: Function): void {
+        //验证手机号码
+        if (!Verification.PhoneNumber(phoneNumber)) {
+            handler(null, [phoneNumber], ErrorCode[ErrorCode.PhoneNumberFormatError]);
+            return;
+        }
+        let dto: any = {
+            PhoneNumber: phoneNumber
+        }
+        this.webApi.Post(ApiConfig.ResetPhoneNumberApi, dto).then((data: any) => {
+            handler(null, [phoneNumber]);
+        }, (error: string) => {
+            console.log("SetRemark error", error);
+            handler(null, [phoneNumber], error);
+        })
+    }
+
+    /**
+     * 游戏登录
+     * @param gameId 游戏id
+     */
+    public GameLogin(gameId: number): boolean {
+        if (this.loginStatus) {
+            //从缓存中获取Code，包括Code，Token,GameToken
+            let cacheAuthorization: Authorization = CacheManager.GetCache(CacheType.Authorization);
+            let authorizationDto: AuthorizationDto = cacheAuthorization.GetAuthorization();
+            cacheAuthorization.SetAuthorization(authorizationDto, gameId);
+            //从缓存中用户信息
+            let cacheUserInfo: UserInfo = CacheManager.GetCache(CacheType.UserInfo);
+            let userInfoDto: UserInfoDto = cacheUserInfo.GetUserInfo();
+            cacheUserInfo.SetUserInfo(userInfoDto, gameId);
+            return true;
+        }
+        return false;
+    }
+}
